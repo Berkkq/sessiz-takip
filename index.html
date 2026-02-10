@@ -3,41 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SessizTakip Pro</title>
+    <title>SessizTakip | Deep Ocean</title>
     <style>
-        /* OKYANUS TEMALI TASARIM */
-        body { background: #0a111a; color: #e2e8f0; font-family: 'Inter', sans-serif; display: flex; justify-content: center; padding: 20px; margin: 0; }
-        .container { background: #111b27; border: 1px solid #1e293b; padding: 25px; border-radius: 20px; width: 100%; max-width: 500px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-        h1 { color: #0095f6; margin: 0; font-size: 24px; text-align: center; }
-        .subtitle { color: #64748b; font-size: 11px; text-align: center; letter-spacing: 2px; margin-bottom: 25px; }
+        /* OKYANUS TEMASI (CSS) */
+        body { 
+            background: radial-gradient(circle at center, #0a192f 0%, #020617 100%); 
+            color: #e2e8f0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh;
+            margin: 0; 
+            padding: 20px;
+        }
+        .container { 
+            background: rgba(15, 23, 42, 0.8); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 149, 246, 0.3); 
+            padding: 35px; 
+            border-radius: 30px; 
+            width: 100%; 
+            max-width: 500px; 
+            box-shadow: 0 0 50px rgba(0, 149, 246, 0.15);
+            text-align: center;
+        }
+        h1 { 
+            color: #0095f6; 
+            font-size: 32px; 
+            text-shadow: 0 0 15px rgba(0, 149, 246, 0.5);
+            margin-bottom: 5px; 
+        }
+        .subtitle { color: #38bdf8; font-size: 10px; letter-spacing: 4px; margin-bottom: 30px; font-weight: bold; }
         
-        label { display: block; font-size: 13px; margin-bottom: 8px; color: #94a3b8; text-align: left; }
-        textarea { width: 100%; height: 100px; background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; color: #fff; padding: 12px; margin-bottom: 15px; box-sizing: border-box; font-family: monospace; font-size: 12px; }
+        label { display: block; font-size: 13px; margin-bottom: 10px; color: #7dd3fc; text-align: left; font-weight: 500; }
+        textarea { 
+            width: 100%; height: 110px; 
+            background: rgba(2, 6, 23, 0.7); 
+            border: 1px solid #1e293b; 
+            border-radius: 15px; 
+            color: #f1f5f9; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            box-sizing: border-box; 
+            resize: none;
+            transition: 0.3s;
+        }
+        textarea:focus { border-color: #0095f6; box-shadow: 0 0 10px rgba(0, 149, 246, 0.3); outline: none; }
         
-        button { width: 100%; background: #0095f6; color: white; border: none; padding: 14px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 15px; transition: 0.2s; }
-        button:hover { background: #007bb5; transform: translateY(-1px); }
+        button { 
+            width: 100%; 
+            background: linear-gradient(135deg, #0095f6 0%, #0ea5e9 100%);
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            border-radius: 15px; 
+            font-weight: 800; 
+            cursor: pointer; 
+            font-size: 16px; 
+            transition: 0.4s;
+            box-shadow: 0 10px 20px -5px rgba(0, 149, 246, 0.4);
+        }
+        button:hover { transform: scale(1.02); box-shadow: 0 15px 25px -5px rgba(0, 149, 246, 0.6); }
         
-        #results { margin-top: 20px; }
-        .user-box { background: #1e293b; padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid #f87171; }
-        .u-info { font-size: 14px; font-weight: 500; }
-        .u-link { color: #0095f6; text-decoration: none; font-size: 12px; border: 1px solid #0095f6; padding: 4px 8px; border-radius: 5px; }
-        .error { color: #f87171; background: rgba(248, 113, 113, 0.1); padding: 10px; border-radius: 8px; font-size: 12px; text-align: center; }
-        .success-msg { color: #4ade80; text-align: center; font-size: 14px; }
+        #results { margin-top: 30px; max-height: 350px; overflow-y: auto; }
+        .user-box { 
+            background: rgba(30, 41, 59, 0.5); 
+            padding: 15px; 
+            border-radius: 12px; 
+            margin-bottom: 10px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-left: 4px solid #f43f5e;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .u-info { font-size: 15px; color: #f8fafc; }
+        .u-link { color: #38bdf8; text-decoration: none; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+        .error { color: #fb7185; background: rgba(251, 113, 133, 0.1); padding: 15px; border-radius: 12px; font-size: 13px; }
+        .success-msg { color: #34d399; font-size: 16px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>SessizTakip</h1>
-    <div class="subtitle">GİZLİLİK MODU AKTİF</div>
+    <div class="subtitle">DEEP OCEAN ANALYSER</div>
 
-    <label>1. Takipçiler (Followers) Listesi</label>
-    <textarea id="f_ers" placeholder="JSON verisini buraya yapıştır..."></textarea>
+    <label>TAKİPÇİ LİSTESİ (JSON)</label>
+    <textarea id="f_ers" placeholder="Followers JSON yapıştır..."></textarea>
 
-    <label>2. Takip Edilenler (Following) Listesi</label>
-    <textarea id="f_ing" placeholder="JSON verisini buraya yapıştır..."></textarea>
+    <label>TAKİP EDİLENLER (JSON)</label>
+    <textarea id="f_ing" placeholder="Following JSON yapıştır..."></textarea>
 
-    <button onclick="analizEt()">ANALİZİ BAŞLAT</button>
+    <button onclick="analizEt()">OKYANUSU TARA</button>
 
     <div id="results"></div>
 </div>
@@ -49,45 +108,37 @@ function analizEt() {
     const fingInput = document.getElementById('f_ing').value;
 
     try {
-        // Adamın kodundaki JSON parse ve Array kontrolü
         const followers = JSON.parse(ferInput);
         const following = JSON.parse(fingInput);
 
-        if (!Array.isArray(followers) || !Array.isArray(following)) {
-            resDiv.innerHTML = '<div class="error">Hata: Yapıştırdığın veri bir liste değil!</div>';
-            return;
-        }
-
-        // Adamın dosyasındaki 'pk' veya 'id' kontrolü yapan zırhlı Set
+        // Adamın dosyasındaki profesyonel PK ve ID kontrolü
         const followerIds = new Set();
         followers.forEach(u => {
             const id = u.id || u.pk; //
             if (id) followerIds.add(id.toString());
         });
 
-        // Takip etmeyenleri bul (ID Karşılaştırma)
+        // Hatalı gösterimi engellemek için ID bazlı filtreleme
         const missing = following.filter(u => {
             const id = u.id || u.pk; //
             return id && !followerIds.has(id.toString());
         });
 
-        // Ekrana basma
         if (missing.length === 0) {
-            resDiv.innerHTML = '<p class="success-msg">Harika! Herkes seni takip ediyor.</p>';
+            resDiv.innerHTML = '<p class="success-msg">🌊 Herkes seni takip ediyor, deniz durgun.</p>';
         } else {
-            resDiv.innerHTML = `<p style="font-size:13px; color:#94a3b8;">${missing.length} kişi geri takip etmiyor:</p>`;
+            resDiv.innerHTML = `<p style="font-size:13px; color:#38bdf8; margin-bottom:15px;">${missing.length} hain tespit edildi:</p>`;
             missing.forEach(u => {
                 const nick = u.username || u.userName || "Bilinmiyor"; //
                 resDiv.innerHTML += `
                     <div class="user-box">
                         <span class="u-info">@${nick}</span>
-                        <a href="https://instagram.com/${nick}" target="_blank" class="u-link">Git</a>
+                        <a href="https://instagram.com/${nick}" target="_blank" class="u-link">PROFİL</a>
                     </div>`;
             });
         }
     } catch (e) {
-        // Hata yakalama
-        resDiv.innerHTML = '<div class="error">Veri okunamadı. Lütfen JSON formatını tam kopyalayın.</div>';
+        resDiv.innerHTML = '<div class="error">⚠️ Veri akışında hata! JSON formatını kontrol et.</div>';
     }
 }
 </script>

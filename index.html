@@ -86,12 +86,12 @@
         </header>
 
         <div class="input-group">
-            <label><i class="fa-solid fa-users"></i> Takipçilerin</label>
-            <textarea id="followersList" placeholder="Listeyi buraya yapıştır..."></textarea>
+            <label><i class="fa-solid fa-users"></i> Takipçilerin (JSON)</label>
+            <textarea id="followersList" placeholder="Takipçiler JSON verisini buraya yapıştır..."></textarea>
         </div>
         <div class="input-group">
-            <label><i class="fa-solid fa-user-plus"></i> Takip Ettiklerin</label>
-            <textarea id="followingList" placeholder="Listeyi buraya yapıştır..."></textarea>
+            <label><i class="fa-solid fa-user-plus"></i> Takip Ettiklerin (JSON)</label>
+            <textarea id="followingList" placeholder="Takip ettiğin kişilerin JSON verisini buraya yapıştır..."></textarea>
         </div>
 
         <button onclick="runAnalysis()" id="mainBtn">ANALİZİ BAŞLAT</button>
@@ -104,36 +104,42 @@
             const ingRaw = document.getElementById('followingList').value;
             const resArea = document.getElementById('results');
 
-            if(!fRaw || !ingRaw) return alert("Lütfen listeleri yapıştır!");
+            if(!fRaw || !ingRaw) return alert("Lütfen JSON listelerini yapıştır!");
 
-            // HATASIZ AYIKLAMA MOTORU (SADECE KULLANICI ADLARI)
-            const clean = (raw) => {
-                const lines = raw.split('\n');
-                const valid = new Set();
-                const trash = ["takip", "et", "mesaj", "profil", "çıkar", "isteği", "doğrulandı", "takipçi"];
+            try {
+                // Ham metni JSON objesine çeviriyoruz
+                const followersData = JSON.parse(fRaw);
+                const followingData = JSON.parse(ingRaw);
 
-                lines.forEach(line => {
-                    const firstWord = line.trim().split(/\s+/)[0].replace('@', '').trim();
-                    // Regex: Harf, rakam, nokta, alt çizgi (3-30 karakter) + Sayı ve Saat Filtresi
-                    if (/^[a-zA-Z0-9._]{3,30}$/.test(firstWord) && isNaN(firstWord) && !firstWord.includes(':') && !trash.includes(firstWord.toLowerCase())) {
-                        valid.add(firstWord);
-                    }
+                // ID'leri (pk) benzersiz bir listede (Set) topluyoruz
+                const followerIds = new Set();
+                followersData.forEach(u => {
+                    const id = (u.id || u.pk || "").toString();
+                    if(id) followerIds.add(id);
                 });
-                return Array.from(valid);
-            };
 
-            const followers = clean(fRaw);
-            const following = clean(ingRaw);
-            const losers = following.filter(u => !followers.includes(u));
+                // Takip edilenler listesinde gez, ID'si takipçilerde yoksa losers'a ekle
+                const losers = followingData.filter(u => {
+                    const id = (u.id || u.pk || "").toString();
+                    return id && !followerIds.has(id);
+                });
 
-            resArea.innerHTML = `<h3 class="res-title">${losers.length} Kişi Geri Takip Etmiyor</h3>`;
-            losers.forEach((u, i) => {
-                const div = document.createElement('div');
-                div.className = 'user-row';
-                div.style.animationDelay = `${i * 0.05}s`;
-                div.innerHTML = `<span>@${u}</span> <a href="https://instagram.com/${u}" target="_blank">GÖR</a>`;
-                resArea.appendChild(div);
-            });
+                // Sonuçları göster
+                resArea.innerHTML = `<h3 class="res-title">${losers.length} Kişi Geri Takip Etmiyor</h3>`;
+                
+                losers.forEach((u, i) => {
+                    const username = u.username || u.userName || "Bilinmiyor";
+                    const div = document.createElement('div');
+                    div.className = 'user-row';
+                    div.style.animationDelay = `${i * 0.05}s`;
+                    div.innerHTML = `<span>@${username}</span> <a href="https://instagram.com/${username}" target="_blank">GÖR</a>`;
+                    resArea.appendChild(div);
+                });
+
+            } catch (e) {
+                alert("Hata: Geçersiz veri formatı! Lütfen Instagram'dan aldığınız JSON verisini tam olarak yapıştırın.");
+                console.error(e);
+            }
         }
     </script>
 </body>
